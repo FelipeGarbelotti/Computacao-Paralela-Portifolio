@@ -1,19 +1,30 @@
- # include <stdio.h>
- # include <unistd.h>
- # include <sys/wait.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <sys/wait.h>
 
- int main () {
- pid_t pid = fork ();
+#define N 4
 
- if ( pid < 0) { // Erro
-    fprintf (stderr , " Fork falhou !\n");
-    return 1;
- } else if (pid == 0) { // Processo Filho
-    printf ("Eu sou o filho!\n");
- } else { // Processo Pai
-    printf ("Eu sou o pai!\n");
-    wait ( NULL ); // Pai espera o filho terminar
-    printf ("Meu filho terminou , agora eu posso terminar .\n");
- }
- return 0;
+int main () {
+
+   pid_t pid = -1;
+
+   for(int i = 0; i<N ; i++){
+      if(pid != 0){
+         pid = fork ();
+      }  
+      if(pid < 0){
+         printf("ERRO");
+      }
+   }
+   
+   if(pid != 0){
+      printf("EU SOU O PAI MEU PID É: %d\n", getpid());
+      wait(NULL);
+   }
+   else{
+      printf("Eu sou o filho de PID: %d, MEU PAI É: %d\n", getpid(), getppid());
+   }
+
+
+   return 0;
 }
